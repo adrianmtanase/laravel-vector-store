@@ -32,7 +32,7 @@ VectorStore::dataset('conversations')
             )
 ```
 
-The default provider is `Pinecone.io`, this can be easily switched using the facade `VectorStore::provider(VectorStoreProviderType::PINECONE)`, or directly in the `vector-store` config. A full list of providers is available in [VectorStoreProviderType](https://github.com/adrianmtanase/laravel-vector-store/src/Enums/VectorStoreProviderType).
+The default provider is `Pinecone.io`, this can be easily switched using the facade `VectorStore::provider(VectorStoreProviderType::PINECONE)`, or directly in the `vector-store` [config](https://github.com/adrianmtanase/laravel-vector-store/blob/main/config/vector-store.php).
 
 ### Work in progress!
 

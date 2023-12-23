@@ -1,6 +1,6 @@
 {
   "name": "adrianmtanase/laravel-vector-store",
-  "description": "The Illuminate Bus package.",
+  "description": "Vector store abstraction layer for the Laravel framework.",
   "license": "MIT",
   "keywords": [
     "adrian",

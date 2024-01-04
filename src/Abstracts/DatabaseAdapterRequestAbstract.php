@@ -11,6 +11,10 @@ abstract class DatabaseAdapterRequestAbstract implements DatabaseAdapterRequestC
 
 		$data = [];
 		foreach ($properties as $name => $value) {
+			if (is_array($value) && empty($value)) {
+				continue;
+			}
+
 			$data[$name] = $value;
 		}
 

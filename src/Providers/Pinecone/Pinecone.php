@@ -4,6 +4,7 @@ namespace AdrianTanase\VectorStore\Providers\Pinecone;
 
 use AdrianTanase\VectorStore\Abstracts\DatabaseAdapterAbstract;
 use AdrianTanase\VectorStore\Contracts\DatabaseAdapterRequestContract;
+use AdrianTanase\VectorStore\Exceptions\InvalidDatabaseAdapterRequestException;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeDeleteRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeGetRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeQueryRequest;
@@ -11,7 +12,6 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpdateRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpsertRequest;
 use Illuminate\Support\Facades\Config;
 use Probots\Pinecone\Client as PineconeClient;
-use Probots\Pinecone\Requests\Exceptions\MissingNameException;
 use Saloon\Contracts\Response;
 
 /**
@@ -32,7 +32,7 @@ class Pinecone extends DatabaseAdapterAbstract {
 
 	function get(DatabaseAdapterRequestContract $request): mixed
 	{
-		$this->assertInstance(PineconeGetRequest::class);
+		assert($request instanceof PineconeGetRequest, new InvalidDatabaseAdapterRequestException());
 
 		return $this->client->index($this->dataset)
 			->vectors()
@@ -46,12 +46,9 @@ class Pinecone extends DatabaseAdapterAbstract {
 			);
 	}
 
-	/**
-	 * @throws MissingNameException
-	 */
 	function delete(DatabaseAdapterRequestContract $request): mixed
 	{
-		$this->assertInstance(PineconeDeleteRequest::class);
+		assert($request instanceof PineconeDeleteRequest, new InvalidDatabaseAdapterRequestException());
 
 		return $this->client->index($this->dataset)
 			->vectors()
@@ -65,12 +62,9 @@ class Pinecone extends DatabaseAdapterAbstract {
 			);
 	}
 
-	/**
-	 * @throws MissingNameException
-	 */
 	function upsert(DatabaseAdapterRequestContract $request): Response
 	{
-		$this->assertInstance(PineconeUpsertRequest::class);
+		assert($request instanceof PineconeUpsertRequest, new InvalidDatabaseAdapterRequestException());
 
 		return $this->client->index($this->dataset)
 			->vectors()
@@ -80,12 +74,9 @@ class Pinecone extends DatabaseAdapterAbstract {
 			);
 	}
 
-	/**
-	 * @throws MissingNameException
-	 */
 	function update(DatabaseAdapterRequestContract $request): mixed
 	{
-		$this->assertInstance(PineconeUpdateRequest::class);
+		assert($request instanceof PineconeUpdateRequest, new InvalidDatabaseAdapterRequestException());
 
 		return $this->client->index($this->dataset)
 			->vectors()
@@ -99,12 +90,9 @@ class Pinecone extends DatabaseAdapterAbstract {
 			);
 	}
 
-	/**
-	 * @throws MissingNameException
-	 */
 	function query(DatabaseAdapterRequestContract $request): Response
 	{
-		$this->assertInstance(PineconeQueryRequest::class);
+		assert($request instanceof PineconeQueryRequest, new InvalidDatabaseAdapterRequestException());
 
 		return $this->client->index($this->dataset)
 			->vectors()

@@ -23,12 +23,26 @@ class DatabaseAdapter implements VectorStoreContract {
 		});
 	}
 
+	/**
+	 * Vector database provider
+	 *
+	 * @param VectorStoreProviderType $provider
+	 *
+	 * @return $this
+	 */
 	public function provider(VectorStoreProviderType $provider): self {
 		$this->provider = $provider;
 
 		return $this;
 	}
 
+	/**
+	 * Dataset name
+	 *
+	 * @param string $dataset
+	 *
+	 * @return DatabaseAdapterAbstract
+	 */
 	public function dataset(string $dataset): DatabaseAdapterAbstract {
 		return match ($this->provider) {
 			VectorStoreProviderType::PINECONE => new Pinecone($dataset)

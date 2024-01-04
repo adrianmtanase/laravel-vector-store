@@ -14,4 +14,9 @@ class PineconeGetRequest extends PineconeRequestAbstract {
 
 		return $this;
 	}
+
+	public static function initialize(): PineconeRequestAbstract
+	{
+		return new self();
+	}
 }

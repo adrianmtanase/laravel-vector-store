@@ -9,8 +9,12 @@ class PineconeUpsertRequest extends PineconeRequestAbstract {
 	{
 	}
 
-	public function id(string $id): self {
-		$this->id = $id;
+	public static function initialize(): self {
+		return new self();
+	}
+
+	public function id(string|int|null $id): self {
+		$this->id = is_numeric($id) ? (string) $id : $id;
 
 		return $this;
 	}

@@ -6,12 +6,17 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Abstracts\PineconeRequestAbstrac
 
 class PineconeUpdateRequest extends PineconeRequestAbstract {
 	public function __construct(
-		protected string  $id,
+		protected ?string  $id = null,
 		protected array   $values = [],
 		protected array   $sparseValues = [],
 		protected array   $setMetadata = []
 	)
 	{
+	}
+
+	public static function build(): self
+	{
+		return new self();
 	}
 
 	public function id(string $id): self {

@@ -12,7 +12,6 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpdateRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpsertRequest;
 use Illuminate\Support\Facades\Config;
 use Probots\Pinecone\Client as PineconeClient;
-use Saloon\Contracts\Response;
 
 /**
  * @class Pinecone
@@ -30,7 +29,7 @@ class Pinecone extends DatabaseAdapterAbstract {
 		$this->client = new PineconeClient(Config::get('vector-store.pinecone_api_key'), Config::get('vector-store.pinecone_environment'));
 	}
 
-	function get(DatabaseAdapterRequestContract $request): mixed
+	function get(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeGetRequest, new InvalidDatabaseAdapterRequestException());
 
@@ -43,10 +42,10 @@ class Pinecone extends DatabaseAdapterAbstract {
 						'namespace' => $this->getNamespace()
 					]
 				)
-			);
+			)->json();
 	}
 
-	function delete(DatabaseAdapterRequestContract $request): mixed
+	function delete(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeDeleteRequest, new InvalidDatabaseAdapterRequestException());
 
@@ -59,10 +58,10 @@ class Pinecone extends DatabaseAdapterAbstract {
 						'namespace' => $this->getNamespace()
 					]
 				)
-			);
+			)->json();
 	}
 
-	function upsert(DatabaseAdapterRequestContract $request): Response
+	function upsert(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeUpsertRequest, new InvalidDatabaseAdapterRequestException());
 
@@ -71,10 +70,10 @@ class Pinecone extends DatabaseAdapterAbstract {
 			->upsert(
 				vectors: $request->serialize(),
 				namespace: $this->getNamespace()
-			);
+			)->json();
 	}
 
-	function update(DatabaseAdapterRequestContract $request): mixed
+	function update(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeUpdateRequest, new InvalidDatabaseAdapterRequestException());
 
@@ -87,10 +86,10 @@ class Pinecone extends DatabaseAdapterAbstract {
 						'namespace' => $this->getNamespace()
 					]
 				)
-			);
+			)->json();
 	}
 
-	function query(DatabaseAdapterRequestContract $request): Response
+	function query(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeQueryRequest, new InvalidDatabaseAdapterRequestException());
 
@@ -103,6 +102,6 @@ class Pinecone extends DatabaseAdapterAbstract {
 						'namespace' => $this->getNamespace()
 					]
 				)
-			);
+			)->json();
 	}
 }

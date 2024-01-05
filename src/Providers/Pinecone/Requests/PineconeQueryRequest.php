@@ -16,6 +16,11 @@ class PineconeQueryRequest extends PineconeRequestAbstract {
 	{
 	}
 
+	public static function build(): self
+	{
+		return new self();
+	}
+
 	public function vector(array $vector): self {
 		$this->vector = $vector;
 

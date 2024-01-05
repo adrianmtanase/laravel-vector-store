@@ -13,6 +13,11 @@ class PineconeDeleteRequest extends PineconeRequestAbstract {
 	{
 	}
 
+	public static function build(): self
+	{
+		return new self();
+	}
+
 	public function ids(array $ids): self {
 		$this->ids = $ids;
 

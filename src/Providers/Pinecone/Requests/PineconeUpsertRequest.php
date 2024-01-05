@@ -9,7 +9,7 @@ class PineconeUpsertRequest extends PineconeRequestAbstract {
 	{
 	}
 
-	public static function initialize(): self {
+	public static function build(): self {
 		return new self();
 	}
 

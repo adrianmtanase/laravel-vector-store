@@ -7,7 +7,7 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Abstracts\PineconeRequestAbstrac
 class PineconeDeleteRequest extends PineconeRequestAbstract {
 	public function __construct(
 		protected ?array $ids = null,
-		protected ?bool $deleteAll = null,
+		protected bool $deleteAll = false,
 		protected ?array $filter = []
 	)
 	{

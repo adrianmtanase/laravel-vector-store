@@ -37,7 +37,3 @@ VectorStore::dataset('vector-store')
 ```
 
 The default provider is `Pinecone.io`, this can be easily switched using the facade `VectorStore::provider(VectorStoreProviderType::PINECONE)`, or directly in the `vector-store` [config](https://github.com/adrianmtanase/laravel-vector-store/blob/main/config/vector-store.php).
-
-### Work in progress!
-
-This is currently a work in progress, v1 will be released once it's stable.

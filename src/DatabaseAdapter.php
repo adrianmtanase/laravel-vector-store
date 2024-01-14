@@ -50,7 +50,7 @@ class DatabaseAdapter implements VectorStoreContract {
 	public function dataset(?string $dataset = null): DatabaseAdapterAbstract {
 		return match ($this->provider) {
 			VectorStoreProviderType::PINECONE => new Pinecone($dataset),
-			VectorStoreProviderType::WEAVIATE => new Weaviate($dataset),
+			VectorStoreProviderType::WEAVIATE => new Weaviate(),
 		};
 	}
 }

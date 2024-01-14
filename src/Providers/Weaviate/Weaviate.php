@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
 use JsonException;
+use Weaviate\Collections\ObjectCollection;
 use Weaviate\Model\ObjectModel;
 use Weaviate\Weaviate as WeaviateClient;
 
@@ -47,11 +48,11 @@ class Weaviate extends DatabaseAdapterAbstract
 	/**
 	 * @param DatabaseAdapterRequestContract[] $requests
 	 *
-	 * @return ObjectModel
+	 * @return ObjectCollection
 	 */
-	function batchCreate(array $requests): ObjectModel
+	function batchCreate(array $requests): ObjectCollection
 	{
-		$objects = collect($requests)->each(function ($request) {
+		$objects = collect($requests)->map(function ($request) {
 			assert($request instanceof WeaviateCreateRequest, new InvalidDatabaseAdapterRequestException);
 
 			$serialized = $request->serialize();

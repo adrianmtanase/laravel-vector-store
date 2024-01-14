@@ -7,6 +7,7 @@ use AdrianTanase\VectorStore\Facades\VectorStore;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateCreateRequest;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateQueryRequest;
 use AdrianTanase\VectorStore\Providers\Weaviate\Serializable\QueryParameters\WeaviateQueryParameters;
+use Weaviate\Collections\ObjectCollection;
 use Weaviate\Model\ObjectModel;
 
 class WeaviateTest extends TestCase
@@ -18,6 +19,31 @@ class WeaviateTest extends TestCase
 		parent::setUp();
 
 		$this->vectorIsLitEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-is-lit-embedding.json'), true);
+	}
+
+	public function test_it_can_batch_create_vector_in_weaviate() {
+		/**
+		 * @var ObjectCollection $response
+		 */
+		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+			->dataset('vector-store')
+			->namespace('general')
+			->batchCreate(
+				[
+					WeaviateCreateRequest::build()
+						->vector($this->vectorIsLitEmbedding)
+						->properties([
+							'text' => 'Vector store has been batch created 1!'
+						]),
+					WeaviateCreateRequest::build()
+						->vector($this->vectorIsLitEmbedding)
+						->properties([
+							'text' => 'Vector store has been batch created 1!'
+						])
+				]
+		   );
+
+		$this->assertEquals($response->first()['properties']['text'], 'Vector store has been batch created 1!', 'Failed to create batch records in Weaviate!');
 	}
 
 	public function test_it_can_create_vector_in_weaviate() {

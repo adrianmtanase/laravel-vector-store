@@ -43,11 +43,11 @@ class DatabaseAdapter implements VectorStoreContract {
 	/**
 	 * Dataset name
 	 *
-	 * @param string $dataset
+	 * @param string|null $dataset
 	 *
 	 * @return DatabaseAdapterAbstract
 	 */
-	public function dataset(string $dataset): DatabaseAdapterAbstract {
+	public function dataset(?string $dataset = null): DatabaseAdapterAbstract {
 		return match ($this->provider) {
 			VectorStoreProviderType::PINECONE => new Pinecone($dataset),
 			VectorStoreProviderType::WEAVIATE => new Weaviate($dataset),

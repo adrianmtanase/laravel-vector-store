@@ -3,7 +3,6 @@
 namespace AdrianTanase\VectorStore\Contracts;
 
 interface DatabaseOperationsContract {
-	function get(DatabaseAdapterRequestContract $request): mixed;
 	function delete(DatabaseAdapterRequestContract $request): mixed;
 	function create(DatabaseAdapterRequestContract $request): mixed;
 	function update(DatabaseAdapterRequestContract $request): mixed;

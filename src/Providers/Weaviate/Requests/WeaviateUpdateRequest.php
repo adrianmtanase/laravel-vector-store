@@ -7,9 +7,8 @@ use AdrianTanase\VectorStore\Providers\Weaviate\Abstracts\WeaviateRequestAbstrac
 class WeaviateUpdateRequest extends WeaviateRequestAbstract {
 	public function __construct(
 		protected ?string  $id = null,
-		protected array   $values = [],
-		protected array   $sparseValues = [],
-		protected array   $setMetadata = []
+		protected array   $data = [],
+		protected bool   $replace = false,
 	)
 	{
 	}
@@ -25,20 +24,14 @@ class WeaviateUpdateRequest extends WeaviateRequestAbstract {
 		return $this;
 	}
 
-	public function values(array $values) : self {
-		$this->values = $values;
+	public function data(array $data) : self {
+		$this->data = $data;
 
 		return $this;
 	}
 
-	public function sparseValues(array $sparseValues) : self {
-		$this->sparseValues = $sparseValues;
-
-		return $this;
-	}
-
-	public function setMetadata(array $setMetadata): self {
-		$this->setMetadata = $setMetadata;
+	public function replace(bool $replace) : self {
+		$this->replace = $replace;
 
 		return $this;
 	}

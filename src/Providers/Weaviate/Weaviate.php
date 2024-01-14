@@ -6,7 +6,10 @@ use AdrianTanase\VectorStore\Abstracts\DatabaseAdapterAbstract;
 use AdrianTanase\VectorStore\Contracts\DatabaseAdapterRequestContract;
 use AdrianTanase\VectorStore\Exceptions\InvalidDatabaseAdapterRequestException;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateCreateRequest;
+use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateDeleteRequest;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateQueryRequest;
+use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateUpdateRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Str;
@@ -30,6 +33,10 @@ class Weaviate extends DatabaseAdapterAbstract
 		parent::__construct($dataset);
 
 		$this->client = new WeaviateClient(Config::get('vector-store.weaviate_url'), Config::get('vector-store.weaviate_api_key'));
+	}
+
+	function client() {
+		return $this->client;
 	}
 
 	function create(DatabaseAdapterRequestContract $request): ObjectModel
@@ -64,19 +71,25 @@ class Weaviate extends DatabaseAdapterAbstract
 		return $this->client->batch()->create(objects: $objects);
 	}
 
-	function get(DatabaseAdapterRequestContract $request): mixed
-	{
-		// TODO: Implement get() method.
-	}
-
 	function delete(DatabaseAdapterRequestContract $request): mixed
 	{
-		// TODO: Implement delete() method.
+		assert($request instanceof WeaviateDeleteRequest, new InvalidDatabaseAdapterRequestException);
+
+		return $this->client->dataObject()->delete(className: $this->getNamespace(), id: $request->serialize()['id']);
 	}
 
 	function update(DatabaseAdapterRequestContract $request): mixed
 	{
-		// TODO: Implement update() method.
+		assert($request instanceof WeaviateUpdateRequest, new InvalidDatabaseAdapterRequestException);
+
+		return $this->client->dataObject()->update(
+			...array_merge(
+				$request->serialize(),
+				[
+					'className' => $this->getNamespace()
+				]
+			),
+		);
 	}
 
 	/**

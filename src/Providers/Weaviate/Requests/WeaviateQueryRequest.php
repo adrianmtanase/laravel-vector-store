@@ -17,7 +17,7 @@ class WeaviateQueryRequest extends WeaviateRequestAbstract {
 		protected array   $vector = [],
 		protected ?float   $distance = null,
 		protected ?float   $certainty = null,
-		protected array|string $properties = [],
+		protected array $properties = [],
 		protected ?WeaviateParametersAbstract $withParameters = null,
 	)
 	{
@@ -47,7 +47,36 @@ class WeaviateQueryRequest extends WeaviateRequestAbstract {
 	}
 
 	public function properties(array|string $properties): self {
-		$this->properties = $properties;
+		if (is_array($properties)) {
+			$this->properties = array_merge($this->properties, $properties);
+		} else {
+			$this->properties[] = $properties;
+		}
+
+		return $this;
+	}
+
+	public function withAdditional(array $additionalProperties) {
+		$this->properties[] = sprintf(
+			'_additional {
+			            %s
+			        }',
+			implode(separator: ', ', array: $additionalProperties));
+
+		return $this;
+	}
+
+	public function withId(): self {
+		if (collect($this->properties)->filter(function (string $value) {
+			return str_contains(haystack: $value, needle: '_additional');
+		})->count() > 0) {
+			return $this;
+		}
+
+		$this->properties[] = '_additional { 
+									id
+						      }';
+
 
 		return $this;
 	}
@@ -84,6 +113,6 @@ class WeaviateQueryRequest extends WeaviateRequestAbstract {
 	}
 
 	public function getGraphQLProperties(): string {
-		return is_array($this->properties) ? implode(', ', $this->properties) : $this->properties;
+		return implode(separator: ', ', array: $this->properties);
 	}
 }

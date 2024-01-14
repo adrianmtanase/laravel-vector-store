@@ -6,9 +6,7 @@ use AdrianTanase\VectorStore\Providers\Weaviate\Abstracts\WeaviateRequestAbstrac
 
 class WeaviateDeleteRequest extends WeaviateRequestAbstract {
 	public function __construct(
-		protected ?array $ids = null,
-		protected bool $deleteAll = false,
-		protected ?array $filter = []
+		protected ?string $id = null
 	)
 	{
 	}
@@ -18,20 +16,8 @@ class WeaviateDeleteRequest extends WeaviateRequestAbstract {
 		return new self();
 	}
 
-	public function ids(array $ids): self {
-		$this->ids = $ids;
-
-		return $this;
-	}
-
-	public function deleteAll(bool $deleteAll) : self {
-		$this->deleteAll = $deleteAll;
-
-		return $this;
-	}
-
-	public function filter(array $filter): self {
-		$this->filter = $filter;
+	public function id(string $id): self {
+		$this->id = $id;
 
 		return $this;
 	}

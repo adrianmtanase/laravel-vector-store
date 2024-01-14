@@ -32,7 +32,7 @@ class PineconeTest extends TestCase
 					])
             );
 
-		$this->assertEquals(1, $response['upsertedCount'], 'Upsert does not equal 1!');
+		$this->assertEquals(1, $response['upsertedCount'], 'Pinecone: Upsert does not equal 1!');
 	}
 
 	/**
@@ -47,7 +47,7 @@ class PineconeTest extends TestCase
 					->ids(['1'])
 			);
 
-		$this->assertEquals('Vector store is lit!', $response['vectors']['1']['metadata']['text'], 'Vector id 1 incorrect');
+		$this->assertEquals('Vector store is lit!', $response['vectors']['1']['metadata']['text'], 'Pinecone: Vector id 1 incorrect');
 	}
 
 	/**
@@ -62,7 +62,7 @@ class PineconeTest extends TestCase
 					->vector($this->vectorIsLitEmbedding)
 			);
 
-		$this->assertEquals('Vector store is lit!', $response['matches'][0]['metadata']['text'], 'Vector id 1 incorrect');
+		$this->assertEquals('Vector store is lit!', $response['matches'][0]['metadata']['text'], 'Pinecone: Vector id 1 incorrect');
 	}
 
 	/**
@@ -90,7 +90,7 @@ class PineconeTest extends TestCase
 					->ids(['1'])
 			);
 
-		$this->assertEquals('New metadata', $response['vectors']['1']['metadata']['new_text'], 'New metadata incorrect');
+		$this->assertEquals('New metadata', $response['vectors']['1']['metadata']['new_text'], 'Pinecone: New metadata incorrect');
 	}
 
 	/**
@@ -117,7 +117,7 @@ class PineconeTest extends TestCase
 					->ids(['1'])
 			);
 
-		$this->assertEmpty($response['vectors'], 'Vector not deleted!');
+		$this->assertEmpty($response['vectors'], 'Pinecone: Vector not deleted!');
 	}
 
 	protected function tearDown(): void

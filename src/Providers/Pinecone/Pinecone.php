@@ -61,6 +61,17 @@ class Pinecone extends DatabaseAdapterAbstract {
 			)->json();
 	}
 
+	/**
+	 * @param DatabaseAdapterRequestContract $request
+	 * @deprecated Please use `upsert` instead
+	 *
+	 * @return array
+	 */
+	function create(DatabaseAdapterRequestContract $request): array
+	{
+		return $this->upsert($request);
+	}
+
 	function upsert(DatabaseAdapterRequestContract $request): array
 	{
 		assert($request instanceof PineconeUpsertRequest, new InvalidDatabaseAdapterRequestException());

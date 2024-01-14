@@ -7,8 +7,12 @@ use AdrianTanase\VectorStore\Contracts\VectorStoreContract;
 use AdrianTanase\VectorStore\Enums\VectorStoreProviderType;
 use AdrianTanase\VectorStore\Exceptions\InvalidProviderException;
 use AdrianTanase\VectorStore\Providers\Pinecone\Pinecone;
+use AdrianTanase\VectorStore\Providers\Weaviate\Weaviate;
 use Illuminate\Support\Facades\Config;
 
+/**
+ * @class DatabaseAdapter
+ */
 class DatabaseAdapter implements VectorStoreContract {
 	protected VectorStoreProviderType $provider = VectorStoreProviderType::PINECONE;
 
@@ -39,13 +43,14 @@ class DatabaseAdapter implements VectorStoreContract {
 	/**
 	 * Dataset name
 	 *
-	 * @param string $dataset
+	 * @param string|null $dataset
 	 *
 	 * @return DatabaseAdapterAbstract
 	 */
-	public function dataset(string $dataset): DatabaseAdapterAbstract {
+	public function dataset(?string $dataset = null): DatabaseAdapterAbstract {
 		return match ($this->provider) {
-			VectorStoreProviderType::PINECONE => new Pinecone($dataset)
+			VectorStoreProviderType::PINECONE => new Pinecone($dataset),
+			VectorStoreProviderType::WEAVIATE => new Weaviate(),
 		};
 	}
 }

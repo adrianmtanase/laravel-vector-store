@@ -2,6 +2,7 @@
 
 namespace AdrianTanase\VectorStore\Abstracts;
 
+use AdrianTanase\VectorStore\Concerns\IgnoresNullProperties;
 use AdrianTanase\VectorStore\Contracts\DatabaseAdapterRequestContract;
 
 abstract class DatabaseAdapterRequestAbstract implements DatabaseAdapterRequestContract {
@@ -15,7 +16,15 @@ abstract class DatabaseAdapterRequestAbstract implements DatabaseAdapterRequestC
 				continue;
 			}
 
-			$data[$name] = $value;
+			if (trait_exists(IgnoresNullProperties::class) && is_null($value)) {
+				continue;
+			}
+
+			if ($value instanceof DatabaseAdapterRequestAbstract) {
+				$data[$name] = $value->serialize();
+			} else {
+				$data[$name] = $value;
+			}
 		}
 
 		return $data;

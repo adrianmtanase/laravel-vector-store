@@ -2,15 +2,23 @@
 
 This package provides an implementation of multiple vector databases (e.g. [Pinecone.io](https://www.pinecone.io/)).
 
+### Installation
+`Requires PHP ^8.2`
+```bash
+composer require adrianmtanase/laravel-vector-store
+```
+
 ### Currently supports
 * [Pinecone.io](https://www.pinecone.io/)
+* [Weaviate](https://github.com/timkley/weaviate-php)
 
 ### Plans to implement
-* [Weaviate](https://github.com/timkley/weaviate-php)
 * [MySql](https://planetscale.com/blog/planetscale-is-bringing-vector-search-and-storage-to-mysql) - once it's ready
 
 ### Usage
 Using the `VectorStore` facade, you can easily access any provider and execute operations.
+
+![Pinecone indexes](documentation/pinecone_indexes.png "Pinecone indexes")
 
 ```php
 VectorStore::dataset('vector-store')

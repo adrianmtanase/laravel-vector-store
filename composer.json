@@ -25,7 +25,8 @@
   "require": {
     "php": "^8.2",
     "probots-io/pinecone-php": "^0.0.3",
-    "spatie/laravel-package-tools": "^1.14.0"
+    "spatie/laravel-package-tools": "^1.14.0",
+    "timkley/weaviate-php": "dev-main"
   },
   "require-dev": {
     "orchestra/testbench": "^8.18",

@@ -23,7 +23,7 @@ class PineconeTest extends TestCase
 	public function test_it_can_upsert_to_pinecone() {
 		$response = VectorStore::dataset('vector-store')
 			->namespace('general')
-			->upsert(
+			->create(
 				PineconeUpsertRequest::build()
 					->id('1')
 					->values($this->vectorIsLitEmbedding)

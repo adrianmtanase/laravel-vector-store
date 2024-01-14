@@ -22,5 +22,17 @@ return [
 	|
 	*/
 	'pinecone_api_key' => env('VECTOR_STORE_PINECONE_API_KEY', ''),
-	'pinecone_environment' => env('VECTOR_STORE_PINECONE_ENVIRONMENT', '')
+	'pinecone_environment' => env('VECTOR_STORE_PINECONE_ENVIRONMENT', ''),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Weaviate
+	|--------------------------------------------------------------------------
+	|
+	| Weaviate is an open source vector database that stores both objects
+	| and vectors.
+	|
+	*/
+	'weaviate_url' => env('VECTOR_STORE_WEAVIATE_URL', ''),
+	'weaviate_api_key' => env('VECTOR_STORE_WEAVIATE_API_KEY', ''),
 ];

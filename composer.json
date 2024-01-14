@@ -10,6 +10,7 @@
     "ai",
     "vector",
     "store",
+    "weaviate",
     "php"
   ],
   "homepage": "https://github.com/adrianmtanase/laravel-vector-store",

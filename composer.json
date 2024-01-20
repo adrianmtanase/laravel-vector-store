@@ -59,5 +59,15 @@
   "config": {
     "sort-packages": true
   },
+  "funding": [
+    {
+      "type": "Patreon",
+      "url": "https://patreon.com/AdrianTanase443"
+    },
+    {
+      "type": "Github",
+      "url": "https://github.com/sponsors/adrianmtanase"
+    }
+  ],
   "minimum-stability": "dev"
 }

@@ -4,84 +4,94 @@ namespace AdrianTanase\VectorStore\Providers\Weaviate\Serializable\QueryParamete
 
 use AdrianTanase\VectorStore\Providers\Weaviate\Abstracts\WeaviateParametersAbstract;
 
-class WeaviateQueryParameters extends WeaviateParametersAbstract {
-	public function __construct(
-		protected ?string $bm25 = null,
-		protected ?string $where = null,
-		protected ?string $hybrid = null,
-		protected ?string $limit = null,
-		protected ?string $autocut = null,
-		protected ?string $group = null,
-		protected ?string $sort = null,
-		protected ?string $groupBy = null,
-		protected ?string $after = null,
-		protected ?string $offset = null,
-	)
-	{
-	}
+class WeaviateQueryParameters extends WeaviateParametersAbstract
+{
+    public function __construct(
+        protected ?string $bm25 = null,
+        protected ?string $where = null,
+        protected ?string $hybrid = null,
+        protected ?string $limit = null,
+        protected ?string $autocut = null,
+        protected ?string $group = null,
+        protected ?string $sort = null,
+        protected ?string $groupBy = null,
+        protected ?string $after = null,
+        protected ?string $offset = null,
+    ) {
+    }
 
-	public static function build(): self
-	{
-		return new self();
-	}
+    public static function build(): self
+    {
+        return new self();
+    }
 
-	public function bm25(string $bm25): self {
-		$this->bm25 = $bm25;
+    public function bm25(string $bm25): self
+    {
+        $this->bm25 = $bm25;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function where(string $where): self {
-		$this->where = $where;
+    public function where(string $where): self
+    {
+        $this->where = $where;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function hybrid(string $hybrid): self {
-		$this->hybrid = $hybrid;
+    public function hybrid(string $hybrid): self
+    {
+        $this->hybrid = $hybrid;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function limit(string $limit): self {
-		$this->limit = $limit;
+    public function limit(string $limit): self
+    {
+        $this->limit = $limit;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function autocut(string $autocut): self {
-		$this->autocut = $autocut;
+    public function autocut(string $autocut): self
+    {
+        $this->autocut = $autocut;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function group(string $group): self {
-		$this->group = $group;
+    public function group(string $group): self
+    {
+        $this->group = $group;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function sort(string $sort): self {
-		$this->sort = $sort;
+    public function sort(string $sort): self
+    {
+        $this->sort = $sort;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function groupBy(string $groupBy): self {
-		$this->groupBy = $groupBy;
+    public function groupBy(string $groupBy): self
+    {
+        $this->groupBy = $groupBy;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function after(string $after): self {
-		$this->after = $after;
+    public function after(string $after): self
+    {
+        $this->after = $after;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function offset(string $offset): self {
-		$this->offset = $offset;
+    public function offset(string $offset): self
+    {
+        $this->offset = $offset;
 
-		return $this;
-	}
+        return $this;
+    }
 }

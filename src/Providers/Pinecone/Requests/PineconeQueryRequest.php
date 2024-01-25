@@ -4,56 +4,62 @@ namespace AdrianTanase\VectorStore\Providers\Pinecone\Requests;
 
 use AdrianTanase\VectorStore\Providers\Pinecone\Abstracts\PineconeRequestAbstract;
 
-class PineconeQueryRequest extends PineconeRequestAbstract {
-	public function __construct(
-		protected array   $vector = [],
-		protected int     $topK = 3,
-		protected array   $filter = [],
-        protected bool    $includeMetadata = true,
-        protected bool    $includeVector = false,
+class PineconeQueryRequest extends PineconeRequestAbstract
+{
+    public function __construct(
+        protected array $vector = [],
+        protected int $topK = 3,
+        protected array $filter = [],
+        protected bool $includeMetadata = true,
+        protected bool $includeVector = false,
         protected ?string $id = null
-	)
-	{
-	}
+    ) {
+    }
 
-	public static function build(): self
-	{
-		return new self();
-	}
+    public static function build(): self
+    {
+        return new self();
+    }
 
-	public function vector(array $vector): self {
-		$this->vector = $vector;
+    public function vector(array $vector): self
+    {
+        $this->vector = $vector;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function topK(int $topK) : self {
-		$this->topK = $topK;
+    public function topK(int $topK): self
+    {
+        $this->topK = $topK;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function filter(array $filter) : self {
-		$this->filter = $filter;
+    public function filter(array $filter): self
+    {
+        $this->filter = $filter;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function includeMetadata(bool $includeMetadata) : self {
-		$this->includeMetadata = $includeMetadata;
+    public function includeMetadata(bool $includeMetadata): self
+    {
+        $this->includeMetadata = $includeMetadata;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function includeVector(bool $includeVector) : self {
-		$this->includeVector = $includeVector;
+    public function includeVector(bool $includeVector): self
+    {
+        $this->includeVector = $includeVector;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function id(string $id) : self {
-		$this->id = $id;
+    public function id(string $id): self
+    {
+        $this->id = $id;
 
-		return $this;
-	}
+        return $this;
+    }
 }

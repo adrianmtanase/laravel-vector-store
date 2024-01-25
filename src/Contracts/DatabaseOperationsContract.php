@@ -2,10 +2,18 @@
 
 namespace AdrianTanase\VectorStore\Contracts;
 
-interface DatabaseOperationsContract {
-	function delete(DatabaseAdapterRequestContract $request): mixed;
-	function create(DatabaseAdapterRequestContract $request): mixed;
-	function update(DatabaseAdapterRequestContract $request): mixed;
-	function query(DatabaseAdapterRequestContract $request): mixed;
-	function namespace(string $namespace): self;
+interface DatabaseOperationsContract
+{
+    public function delete(DatabaseAdapterRequestContract $request): mixed;
+
+    /**
+     * @param  DatabaseAdapterRequestContract[]|DatabaseAdapterRequestContract  $request
+     */
+    public function create(array|DatabaseAdapterRequestContract $request): mixed;
+
+    public function update(DatabaseAdapterRequestContract $request): mixed;
+
+    public function query(DatabaseAdapterRequestContract $request): mixed;
+
+    public function namespace(string $namespace): self;
 }

@@ -2,6 +2,6 @@
 
 namespace AdrianTanase\VectorStore\Concerns;
 
-trait  IgnoresNullProperties
+trait IgnoresNullProperties
 {
 }

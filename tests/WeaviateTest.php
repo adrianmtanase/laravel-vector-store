@@ -14,178 +14,187 @@ use Weaviate\Model\ObjectModel;
 
 class WeaviateTest extends TestCase
 {
-	private array $vectorIsLitEmbedding;
-	private array $vectorStoreUpdateTestEmbedding;
+    private array $vectorIsLitEmbedding;
 
-	protected function setUp(): void
-	{
-		parent::setUp();
+    private array $vectorStoreUpdateTestEmbedding;
 
-		$this->vectorIsLitEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-is-lit-embedding.json'), true);
-		$this->vectorStoreUpdateTestEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-update-test-embedding.json'), true);
-	}
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-	public function test_it_can_batch_create_vector() {
-		/**
-		 * @var ObjectCollection $response
-		 */
-		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace('general')
-			->batchCreate(
-				[
-					WeaviateCreateRequest::build()
-						->vector($this->vectorIsLitEmbedding)
-						->properties([
-							'text' => 'Vector store has been batch created 1!'
-						]),
-					WeaviateCreateRequest::build()
-						->vector($this->vectorIsLitEmbedding)
-						->properties([
-							'text' => 'Vector store has been batch created 1!'
-						])
-				]
-		   );
+        $this->vectorIsLitEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-is-lit-embedding.json'), true);
+        $this->vectorStoreUpdateTestEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-update-test-embedding.json'), true);
+    }
 
-		$this->assertEquals($response->first()['properties']['text'], 'Vector store has been batch created 1!', 'Weaviate: Failed to create batch records');
-	}
-
-	public function test_it_can_create_vector() {
-		/**
-		 * @var ObjectModel $response
-		 */
-		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace('general')
-			->create(
-				WeaviateCreateRequest::build()
-					->vector($this->vectorIsLitEmbedding)
-					->properties([
-						'text' => 'Vector store is lit!'
-					])
+    public function test_it_can_batch_create_vector()
+    {
+        /**
+         * @var ObjectCollection $response
+         */
+        $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace('general')
+            ->batchCreate(
+                [
+                    WeaviateCreateRequest::build()
+                        ->vector($this->vectorIsLitEmbedding)
+                        ->properties([
+                            'text' => 'Vector store has been batch created 1!',
+                        ]),
+                    WeaviateCreateRequest::build()
+                        ->vector($this->vectorIsLitEmbedding)
+                        ->properties([
+                            'text' => 'Vector store has been batch created 1!',
+                        ]),
+                ]
             );
 
-		$this->assertEquals($response->getProperties()->get('text'), 'Vector store is lit!', 'Weaviate: Failed to create a record');
-	}
+        $this->assertEquals($response->first()['properties']['text'], 'Vector store has been batch created 1!', 'Weaviate: Failed to create batch records');
+    }
 
-	/**
-	 * @depends test_it_can_create_vector
-	 * @return void
-	 */
-	public function test_it_can_query_vector() {
-		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace('general')
-			->query(
-				WeaviateQueryRequest::build()
-					->vector($this->vectorIsLitEmbedding)
-					->properties(['text'])
-					->withId()
-					->withParameters(WeaviateQueryParameters::build()->group('type: closest, force: 1'))
-			);
+    public function test_it_can_create_vector()
+    {
+        /**
+         * @var ObjectModel $response
+         */
+        $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace('general')
+            ->create(
+                WeaviateCreateRequest::build()
+                    ->vector($this->vectorIsLitEmbedding)
+                    ->properties([
+                        'text' => 'Vector store is lit!',
+                    ])
+            );
 
-		$this->assertEquals('Vector store is lit!', $response['data']['Get']['General'][0]['text'], 'Weaviate: Vector query wrong!');
-	}
+        $this->assertEquals($response->getProperties()->get('text'), 'Vector store is lit!', 'Weaviate: Failed to create a record');
+    }
 
-	/**
-	 * @depends test_it_can_create_vector
-	 * @return void
-	 */
-	public function test_it_can_update_vector() {
-		$randomNamespace = ucfirst(fake()->word());
+    /**
+     * @depends test_it_can_create_vector
+     *
+     * @return void
+     */
+    public function test_it_can_query_vector()
+    {
+        $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace('general')
+            ->query(
+                WeaviateQueryRequest::build()
+                    ->vector($this->vectorIsLitEmbedding)
+                    ->properties(['text'])
+                    ->withId()
+                    ->withParameters(WeaviateQueryParameters::build()->group('type: closest, force: 1'))
+            );
 
-		/**
-		 * @var ObjectModel $response
-		 */
-		$create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->create(
-				WeaviateCreateRequest::build()
-					->vector($this->vectorStoreUpdateTestEmbedding)
-					->properties([
-						'text' => 'First iteration!'
-					])
-			);
+        $this->assertEquals('Vector store is lit!', $response['data']['Get']['General'][0]['text'], 'Weaviate: Vector query wrong!');
+    }
 
-		$this->assertEquals($create->getProperties()->get('text'), 'First iteration!', 'Weaviate: Failed to create a record');
+    /**
+     * @depends test_it_can_create_vector
+     *
+     * @return void
+     */
+    public function test_it_can_update_vector()
+    {
+        $randomNamespace = ucfirst(fake()->word());
 
-		// update the vector
-		$update = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->update(
-				WeaviateUpdateRequest::build()
-					->id($create->getId())
-					->data(WeaviateCreateRequest::build()->properties(['text' => 'Second iteration!'])->serialize())
-			);
+        /**
+         * @var ObjectModel $response
+         */
+        $create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->create(
+                WeaviateCreateRequest::build()
+                    ->vector($this->vectorStoreUpdateTestEmbedding)
+                    ->properties([
+                        'text' => 'First iteration!',
+                    ])
+            );
 
-		$this->assertTrue($update, 'Weaviate update failed!');
+        $this->assertEquals($create->getProperties()->get('text'), 'First iteration!', 'Weaviate: Failed to create a record');
 
-		// check if the new metadata contains the new field
-		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->query(
-				WeaviateQueryRequest::build()
-					->vector($this->vectorStoreUpdateTestEmbedding)
-					->properties(['text'])
-					->withId()
-			);
+        // update the vector
+        $update = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->update(
+                WeaviateUpdateRequest::build()
+                    ->id($create->getId())
+                    ->data(WeaviateCreateRequest::build()->properties(['text' => 'Second iteration!'])->serialize())
+            );
 
-		$this->assertEquals('Second iteration!', $response['data']['Get'][$randomNamespace][0]['text'], 'Weaviate: New metadata incorrect');
-	}
+        $this->assertTrue($update, 'Weaviate update failed!');
 
-	/**
-	 * @depends test_it_can_create_vector
-	 * @return void
-	 */
-	public function test_it_can_delete_vectors() {
-		$randomNamespace = ucfirst(fake()->word());
+        // check if the new metadata contains the new field
+        $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->query(
+                WeaviateQueryRequest::build()
+                    ->vector($this->vectorStoreUpdateTestEmbedding)
+                    ->properties(['text'])
+                    ->withId()
+            );
 
-		/**
-		 * @var ObjectModel $response
-		 */
-		$create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->create(
-				WeaviateCreateRequest::build()
-					->vector($this->vectorStoreUpdateTestEmbedding)
-					->properties([
-						'text' => 'First iteration!'
-					])
-			);
+        $this->assertEquals('Second iteration!', $response['data']['Get'][$randomNamespace][0]['text'], 'Weaviate: New metadata incorrect');
+    }
 
-		$this->assertEquals($create->getProperties()->get('text'), 'First iteration!', 'Weaviate: Failed to create a record');
+    /**
+     * @depends test_it_can_create_vector
+     *
+     * @return void
+     */
+    public function test_it_can_delete_vectors()
+    {
+        $randomNamespace = ucfirst(fake()->word());
 
-		// delete
-		$delete = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->delete(
-				WeaviateDeleteRequest::build()
-					->id($create->getId())
-			);
+        /**
+         * @var ObjectModel $response
+         */
+        $create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->create(
+                WeaviateCreateRequest::build()
+                    ->vector($this->vectorStoreUpdateTestEmbedding)
+                    ->properties([
+                        'text' => 'First iteration!',
+                    ])
+            );
 
-		$this->assertTrue($delete->successful(), 'Weaviate delete failed!');
+        $this->assertEquals($create->getProperties()->get('text'), 'First iteration!', 'Weaviate: Failed to create a record');
 
-		// check if the new metadata contains the new field
-		$response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-			->dataset()
-			->namespace($randomNamespace)
-			->query(
-				WeaviateQueryRequest::build()
-					->vector($this->vectorStoreUpdateTestEmbedding)
-					->properties(['text'])
-					->withId()
-			);
+        // delete
+        $delete = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->delete(
+                WeaviateDeleteRequest::build()
+                    ->id($create->getId())
+            );
 
-		$this->assertEmpty($response['data']['Get'][$randomNamespace], 'Weaviate: Record not deleted');
-	}
+        $this->assertTrue($delete->successful(), 'Weaviate delete failed!');
 
-	protected function tearDown(): void
-	{
-		parent::tearDown();
-	}
+        // check if the new metadata contains the new field
+        $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
+            ->dataset()
+            ->namespace($randomNamespace)
+            ->query(
+                WeaviateQueryRequest::build()
+                    ->vector($this->vectorStoreUpdateTestEmbedding)
+                    ->properties(['text'])
+                    ->withId()
+            );
+
+        $this->assertEmpty($response['data']['Get'][$randomNamespace], 'Weaviate: Record not deleted');
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+    }
 }

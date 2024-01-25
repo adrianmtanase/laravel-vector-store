@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Facade;
  *
  * @see \AdrianTanase\VectorStore\DatabaseAdapter
  */
-class VectorStore extends Facade {
-	protected static function getFacadeAccessor()
-	{
-		return DatabaseAdapter::class;
-	}
+class VectorStore extends Facade
+{
+    protected static function getFacadeAccessor()
+    {
+        return DatabaseAdapter::class;
+    }
 }

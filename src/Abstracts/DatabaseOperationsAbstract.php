@@ -6,16 +6,17 @@ use AdrianTanase\VectorStore\Contracts\DatabaseOperationsContract;
 
 abstract class DatabaseOperationsAbstract implements DatabaseOperationsContract
 {
-	private string $namespace;
+    private string $namespace;
 
-	function namespace(string $namespace): DatabaseOperationsContract
-	{
-		$this->namespace = $namespace;
+    public function namespace(string $namespace): DatabaseOperationsContract
+    {
+        $this->namespace = $namespace;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	protected function getNamespace(): string {
-		return $this->namespace;
-	}
+    protected function getNamespace(): string
+    {
+        return $this->namespace;
+    }
 }

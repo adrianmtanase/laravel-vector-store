@@ -4,42 +4,46 @@ namespace AdrianTanase\VectorStore\Providers\Pinecone\Requests;
 
 use AdrianTanase\VectorStore\Providers\Pinecone\Abstracts\PineconeRequestAbstract;
 
-class PineconeUpdateRequest extends PineconeRequestAbstract {
-	public function __construct(
-		protected ?string  $id = null,
-		protected array   $values = [],
-		protected array   $sparseValues = [],
-		protected array   $setMetadata = []
-	)
-	{
-	}
+class PineconeUpdateRequest extends PineconeRequestAbstract
+{
+    public function __construct(
+        protected ?string $id = null,
+        protected array $values = [],
+        protected array $sparseValues = [],
+        protected array $setMetadata = []
+    ) {
+    }
 
-	public static function build(): self
-	{
-		return new self();
-	}
+    public static function build(): self
+    {
+        return new self();
+    }
 
-	public function id(string $id): self {
-		$this->id = $id;
+    public function id(string $id): self
+    {
+        $this->id = $id;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function values(array $values) : self {
-		$this->values = $values;
+    public function values(array $values): self
+    {
+        $this->values = $values;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function sparseValues(array $sparseValues) : self {
-		$this->sparseValues = $sparseValues;
+    public function sparseValues(array $sparseValues): self
+    {
+        $this->sparseValues = $sparseValues;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setMetadata(array $setMetadata): self {
-		$this->setMetadata = $setMetadata;
+    public function setMetadata(array $setMetadata): self
+    {
+        $this->setMetadata = $setMetadata;
 
-		return $this;
-	}
+        return $this;
+    }
 }

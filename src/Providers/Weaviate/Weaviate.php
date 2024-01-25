@@ -10,9 +10,7 @@ use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateDeleteRequest;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateQueryRequest;
 use AdrianTanase\VectorStore\Providers\Weaviate\Requests\WeaviateUpdateRequest;
 use Illuminate\Http\Client\Response;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 use JsonException;
 use Weaviate\Collections\ObjectCollection;
 use Weaviate\Model\ObjectModel;
@@ -25,96 +23,124 @@ use Weaviate\Weaviate as WeaviateClient;
  */
 class Weaviate extends DatabaseAdapterAbstract
 {
+    private WeaviateClient $client;
 
-	private WeaviateClient $client;
+    public function __construct()
+    {
+        parent::__construct('');
 
-	public function __construct()
-	{
-		parent::__construct('');
+        $this->client = new WeaviateClient(Config::get('vector-store.weaviate_url'), Config::get('vector-store.weaviate_api_key'));
+    }
 
-		$this->client = new WeaviateClient(Config::get('vector-store.weaviate_url'), Config::get('vector-store.weaviate_api_key'));
-	}
+    /**
+     * Returns an instance of the Weaviate client
+     *
+     * @return WeaviateClient
+     */
+    public function client()
+    {
+        return $this->client;
+    }
 
-	function client() {
-		return $this->client;
-	}
+    /**
+     * @param  WeaviateCreateRequest[]|WeaviateCreateRequest  $request
+     */
+    public function create(array|DatabaseAdapterRequestContract $request): ObjectModel|ObjectCollection
+    {
+        if (is_iterable($request)) {
+            return $this->batchCreate($request);
+        }
 
-	function create(DatabaseAdapterRequestContract $request): ObjectModel
-	{
-		assert($request instanceof WeaviateCreateRequest, new InvalidDatabaseAdapterRequestException);
+        assert($request instanceof WeaviateCreateRequest, new InvalidDatabaseAdapterRequestException);
 
-		return $this->client->dataObject()->create(data: array_merge(
-				$request->serialize(),
-				[
-					'class' => $this->getNamespace()
-				]
-			)
-		);
-	}
+        return $this->client->dataObject()->create(data: array_merge(
+            $request->serialize(),
+            [
+                'class' => $this->getNamespace(),
+            ]
+        )
+        );
+    }
 
-	/**
-	 * @param DatabaseAdapterRequestContract[] $requests
-	 *
-	 * @return ObjectCollection
-	 */
-	function batchCreate(array $requests): ObjectCollection
-	{
-		$objects = collect($requests)->map(function ($request) {
-			assert($request instanceof WeaviateCreateRequest, new InvalidDatabaseAdapterRequestException);
+    /**
+     * @param  WeaviateCreateRequest[]  $requests
+     */
+    public function batchCreate(array $requests): ObjectCollection
+    {
+        $objects = collect($requests)->map(function ($request) {
+            assert($request instanceof WeaviateCreateRequest, new InvalidDatabaseAdapterRequestException);
 
-			$serialized = $request->serialize();
-			$serialized['class'] = $this->getNamespace();
+            $serialized = $request->serialize();
+            $serialized['class'] = $this->getNamespace();
 
-			return $serialized;
-		})->toArray();
+            return $serialized;
+        })->toArray();
 
-		return $this->client->batch()->create(objects: $objects);
-	}
+        return $this->client->batch()->create(objects: $objects);
+    }
 
-	function delete(DatabaseAdapterRequestContract $request): mixed
-	{
-		assert($request instanceof WeaviateDeleteRequest, new InvalidDatabaseAdapterRequestException);
+    /**
+     * @param  WeaviateDeleteRequest  $request
+     */
+    public function delete(DatabaseAdapterRequestContract $request): Response
+    {
+        assert($request instanceof WeaviateDeleteRequest, new InvalidDatabaseAdapterRequestException);
 
-		return $this->client->dataObject()->delete(className: $this->getNamespace(), id: $request->serialize()['id']);
-	}
+        return $this->client->dataObject()->delete(className: $this->getNamespace(), id: $request->serialize()['id']);
+    }
 
-	function update(DatabaseAdapterRequestContract $request): mixed
-	{
-		assert($request instanceof WeaviateUpdateRequest, new InvalidDatabaseAdapterRequestException);
+    /**
+     * @param  WeaviateUpdateRequest  $request
+     */
+    public function update(DatabaseAdapterRequestContract $request): bool
+    {
+        assert($request instanceof WeaviateUpdateRequest, new InvalidDatabaseAdapterRequestException);
 
-		return $this->client->dataObject()->update(
-			...array_merge(
-				$request->serialize(),
-				[
-					'className' => $this->getNamespace()
-				]
-			),
-		);
-	}
+        return $this->client->dataObject()->update(
+            ...array_merge(
+                $request->serialize(),
+                [
+                    'className' => $this->getNamespace(),
+                ]
+            ),
+        );
+    }
 
-	/**
-	 * Query by vector
-	 *
-	 * @throws JsonException
-	 */
-	function query(DatabaseAdapterRequestContract $request): array
-	{
-		assert($request instanceof WeaviateQueryRequest, new InvalidDatabaseAdapterRequestException());
+    /**
+     * Query by vector
+     *
+     * @param  WeaviateQueryRequest  $request
+     *
+     * @throws JsonException
+     */
+    public function query(DatabaseAdapterRequestContract $request): array
+    {
+        assert($request instanceof WeaviateQueryRequest, new InvalidDatabaseAdapterRequestException());
 
-		return $this->client->graphql()->get(sprintf('{
+        return $this->client->graphql()->get(sprintf('{
 		    Get {
 		      %s(%s) {
 		        %s
 		      }
 		    }
 		}', ucfirst(strtolower($this->getNamespace())), $request->getGraphQLParameters(), $request->getGraphQLProperties()));
-	}
+    }
 
-	/**
-	 * Raw query using GraphQL
-	 */
-	function rawQuery(string $graphQLQuery): array
-	{
-		return $this->client->graphql()->get($graphQLQuery);
-	}
+    /**
+     * @param  WeaviateQueryRequest  $request
+     *
+     * @throws JsonException
+     */
+    public function get(DatabaseAdapterRequestContract $request): array
+    {
+        return $this->query($request);
+    }
+
+    /**
+     * Raw query using GraphQL
+     */
+    public function rawQuery(string $graphQLQuery): array
+    {
+        return $this->client->graphql()->get($graphQLQuery);
+    }
 }

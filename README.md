@@ -3,7 +3,7 @@
 This package provides an implementation of multiple vector databases (e.g. [Pinecone.io](https://www.pinecone.io/)).
 
 ### Installation
-`Requires PHP ^8.2`
+`Requires PHP ^8.1`
 ```bash
 composer require adrianmtanase/laravel-vector-store
 ```

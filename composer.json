@@ -71,5 +71,6 @@
       "url": "https://github.com/sponsors/adrianmtanase"
     }
   ],
-  "minimum-stability": "dev"
+  "minimum-stability": "stable",
+  "prefer-stable": true
 }

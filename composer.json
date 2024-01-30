@@ -28,7 +28,7 @@
     "php": "^8.1",
     "probots-io/pinecone-php": "^0.0.3",
     "spatie/laravel-package-tools": "^1.14.0",
-    "timkley/weaviate-php": "dev-main"
+    "timkley/weaviate-php": "0.6.2"
   },
   "require-dev": {
     "laravel/pint": "dev-main",

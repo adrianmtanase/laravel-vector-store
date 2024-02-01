@@ -1,6 +1,16 @@
 # Vector database store for Laravel
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/adrianmtanase/laravel-vector-store.svg?style=flat-square)](https://packagist.org/packages/adrianmtanase/laravel-vector-store)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/adrianmtanase/laravel-vector-store/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/adrianmtanase/laravel-vector-store/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/adrianmtanase/laravel-vector-store/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/adrianmtanase/laravel-vector-store/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/adrianmtanase/laravel-vector-store.svg?style=flat-square)](https://packagist.org/packages/adrianmtanase/laravel-vector-store)
+
+
 This package provides an implementation of multiple vector databases (e.g. [Pinecone.io](https://www.pinecone.io/)).
+
+## Support us
+
+If this helped you, consider supporting my development over on [Patreon](https://patreon.com/AdrianTanase443) or on [Github](https://github.com/sponsors/adrianmtanase).
 
 ### Installation
 `Requires PHP ^8.1`

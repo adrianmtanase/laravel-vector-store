@@ -99,8 +99,7 @@ class Pinecone extends DatabaseAdapterAbstract
             assert($request instanceof PineconeUpsertRequest, new InvalidDatabaseAdapterRequestException());
         }
 
-
-      $response = $this->client->data()
+        $response = $this->client->data()
             ->vectors()
             ->upsert(
                 vectors: $request instanceof DatabaseAdapterRequestContract ?
@@ -111,7 +110,7 @@ class Pinecone extends DatabaseAdapterAbstract
                 namespace: $this->getNamespace()
             );
 
-      return [$response->body()];
+        return [$response->body()];
     }
 
     /**
@@ -123,15 +122,12 @@ class Pinecone extends DatabaseAdapterAbstract
     {
         assert($request instanceof PineconeUpdateRequest, new InvalidDatabaseAdapterRequestException());
 
-        return $this->client->index($this->dataset)
+        return $this->client->data()
             ->vectors()
             ->update(
-                ...array_merge(
-                    $request->serialize(),
-                    [
-                        'namespace' => $this->getNamespace(),
-                    ]
-                )
+                id: $this->dataset,
+                values: $request->serialize()['vector'],
+                namespace: $this->getNamespace()
             )->json();
     }
 
@@ -149,7 +145,7 @@ class Pinecone extends DatabaseAdapterAbstract
             ->query(
                 vector: $request->serialize()['vector'],
                 topK: $request->serialize()['topK'],
-                namespace: $this->getNamespace()
+                namespace: $this->getNamespace(),
             )
             ->json();
     }

@@ -42,13 +42,21 @@ class DatabaseAdapter implements VectorStoreContract
     }
 
     /**
-     * Dataset name
+     * Returns an instance of your active provider
      */
-    public function dataset(?string $dataset = null): DatabaseAdapterAbstract
+    public function instance(): DatabaseAdapterAbstract
     {
         return match ($this->provider) {
-            VectorStoreProviderType::PINECONE => new Pinecone($dataset),
+            VectorStoreProviderType::PINECONE => new Pinecone(),
             VectorStoreProviderType::WEAVIATE => new Weaviate(),
         };
+    }
+
+    /**
+     * @deprecated Pinecone no longer requires a dataset to operate
+     */
+    public function dataset(): DatabaseAdapterAbstract
+    {
+        return $this->instance();
     }
 }

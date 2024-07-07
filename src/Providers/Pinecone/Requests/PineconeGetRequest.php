@@ -6,9 +6,7 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Abstracts\PineconeRequestAbstrac
 
 class PineconeGetRequest extends PineconeRequestAbstract
 {
-    public function __construct(protected ?array $ids = null)
-    {
-    }
+    public function __construct(protected ?array $ids = null) {}
 
     public function ids(array $ids): self
     {

@@ -9,5 +9,5 @@ interface VectorStoreContract
 {
     public function provider(VectorStoreProviderType $provider): self;
 
-    public function dataset(string $dataset): DatabaseAdapterAbstract;
+    public function dataset(): DatabaseAdapterAbstract;
 }

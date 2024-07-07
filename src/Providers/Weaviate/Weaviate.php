@@ -27,8 +27,6 @@ class Weaviate extends DatabaseAdapterAbstract
 
     public function __construct()
     {
-        parent::__construct('');
-
         $this->client = new WeaviateClient(Config::get('vector-store.weaviate_url'), Config::get('vector-store.weaviate_api_key'));
     }
 

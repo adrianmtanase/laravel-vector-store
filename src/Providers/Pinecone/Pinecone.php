@@ -11,7 +11,9 @@ use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeQueryRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpdateRequest;
 use AdrianTanase\VectorStore\Providers\Pinecone\Requests\PineconeUpsertRequest;
 use Illuminate\Support\Facades\Config;
+use JsonException;
 use Probots\Pinecone\Client as PineconeClient;
+use Probots\Pinecone\Requests\Exceptions\MissingHostException;
 use Probots\Pinecone\Requests\Exceptions\MissingNameException;
 use Throwable;
 
@@ -24,23 +26,23 @@ class Pinecone extends DatabaseAdapterAbstract
 {
     private PineconeClient $client;
 
-    public function __construct(string $dataset)
+    public function __construct()
     {
-        parent::__construct($dataset);
-
-        $this->client = new PineconeClient(Config::get('vector-store.pinecone_api_key'), Config::get('vector-store.pinecone_environment'));
+        $this->client = new PineconeClient(Config::get('vector-store.pinecone_api_key'), Config::get('vector-store.pinecone_host'));
     }
 
     /**
      * @param  PineconeGetRequest  $request
      *
-     * @throws MissingNameException&Throwable
+     * @throws MissingHostException
+     * @throws JsonException
      */
     public function get(DatabaseAdapterRequestContract $request): array
     {
         assert($request instanceof PineconeGetRequest, new InvalidDatabaseAdapterRequestException());
 
-        return $this->client->index($this->dataset)
+        return $this->client
+            ->data()
             ->vectors()
             ->fetch(
                 ...array_merge(
@@ -56,12 +58,15 @@ class Pinecone extends DatabaseAdapterAbstract
      * @param  PineconeDeleteRequest  $request
      *
      * @throws MissingNameException&Throwable
+     * @throws MissingHostException
+     * @throws JsonException
      */
     public function delete(DatabaseAdapterRequestContract $request): array
     {
         assert($request instanceof PineconeDeleteRequest, new InvalidDatabaseAdapterRequestException());
 
-        return $this->client->index($this->dataset)
+        return $this->client
+            ->data()
             ->vectors()
             ->delete(
                 ...array_merge(
@@ -77,6 +82,8 @@ class Pinecone extends DatabaseAdapterAbstract
      * @param  PineconeUpsertRequest[]|PineconeUpsertRequest  $request
      *
      * @throws MissingNameException&Throwable
+     * @throws MissingHostException
+     * @throws JsonException
      */
     public function create(array|DatabaseAdapterRequestContract $request): array
     {
@@ -87,6 +94,8 @@ class Pinecone extends DatabaseAdapterAbstract
      * @param  PineconeUpsertRequest[]|PineconeUpsertRequest  $request
      *
      * @throws MissingNameException&Throwable
+     * @throws MissingHostException
+     * @throws JsonException
      */
     public function upsert(array|DatabaseAdapterRequestContract $request): array
     {
@@ -98,7 +107,7 @@ class Pinecone extends DatabaseAdapterAbstract
             assert($request instanceof PineconeUpsertRequest, new InvalidDatabaseAdapterRequestException());
         }
 
-        return $this->client->index($this->dataset)
+        return $this->client->data()
             ->vectors()
             ->upsert(
                 vectors: $request instanceof DatabaseAdapterRequestContract ?
@@ -113,13 +122,14 @@ class Pinecone extends DatabaseAdapterAbstract
     /**
      * @param  PineconeUpdateRequest  $request
      *
-     * @throws MissingNameException&Throwable
+     * @throws MissingHostException|JsonException
      */
     public function update(DatabaseAdapterRequestContract $request): array
     {
         assert($request instanceof PineconeUpdateRequest, new InvalidDatabaseAdapterRequestException());
 
-        return $this->client->index($this->dataset)
+        return $this->client
+            ->data()
             ->vectors()
             ->update(
                 ...array_merge(
@@ -134,21 +144,20 @@ class Pinecone extends DatabaseAdapterAbstract
     /**
      * @param  PineconeQueryRequest  $request
      *
-     * @throws MissingNameException&Throwable
+     * @throws MissingHostException|JsonException
      */
     public function query(DatabaseAdapterRequestContract $request): array
     {
         assert($request instanceof PineconeQueryRequest, new InvalidDatabaseAdapterRequestException());
 
-        return $this->client->index($this->dataset)
+        return $this->client
+            ->data()
             ->vectors()
             ->query(
-                ...array_merge(
-                    $request->serialize(),
-                    [
-                        'namespace' => $this->getNamespace(),
-                    ]
-                )
-            )->json();
+                vector: $request->serialize()['vector'],
+                namespace: $this->getNamespace(),
+                topK: $request->serialize()['topK'],
+            )
+            ->json();
     }
 }

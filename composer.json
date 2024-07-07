@@ -1,6 +1,6 @@
 {
   "name": "adrianmtanase/laravel-vector-store",
-  "version": "0.0.25",
+  "version": "1.0.1",
   "description": "Vector store abstraction layer for the Laravel framework.",
   "license": "MIT",
   "keywords": [

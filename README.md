@@ -25,13 +25,19 @@ composer require adrianmtanase/laravel-vector-store
 ### Plans to implement
 * [MySql](https://planetscale.com/blog/planetscale-is-bringing-vector-search-and-storage-to-mysql) - once it's ready
 
+### ❗ If you're coming from version 0.0.25 ❗
+* Coming from version `0.0.25` you'll have to re-publish the config, as the Pinecone environment variable has been replaced with `pinecone_host`
+```bash
+php artisan vendor:publish
+```
+
 ### Usage
 Using the `VectorStore` facade, you can easily access any provider and execute operations.
 
 ![Pinecone indexes](documentation/pinecone_indexes.png "Pinecone indexes")
 
 ```php
-VectorStore::dataset('vector-store')
+VectorStore::instance()
            ->namespace('general')
            ->upsert(
                PineconeUpsertRequest::build()
@@ -61,7 +67,7 @@ As Weaviate runs through GraphQL, the query language is complex. There are sever
 
 ```php
 VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-           ->dataset()
+           ->instance()
            ->namespace('general')
            ->query(
                WeaviateQueryRequest::build()
@@ -83,12 +89,12 @@ VectorStore::provider(VectorStoreProviderType::WEAVIATE)
            );
 ```
 
-As the system is complex, the package also supports a `rawQuery` form, or even getting a direct instance of the undelying client.
+As the system is complex, the package also supports a `rawQuery` form, or even getting access to the underlying client.
 
 #### Weaviate raw query
 ```php
 VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-           ->dataset()
+           ->instance()
            ->namespace('general')
            ->rawQuery('
                {
@@ -118,7 +124,7 @@ VectorStore::provider(VectorStoreProviderType::WEAVIATE)
 
 ```php
 VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-           ->dataset()
+           ->instance()
            ->client()
            ->batchDelete('general') 
 ```

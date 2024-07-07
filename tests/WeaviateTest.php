@@ -26,13 +26,18 @@ class WeaviateTest extends TestCase
         $this->vectorStoreUpdateTestEmbedding = json_decode(file_get_contents('tests/ada-002-vector-store-update-test-embedding.json'), true);
     }
 
+    /**
+     * @depends test_it_can_query_vector
+     *
+     * @return void
+     */
     public function test_it_can_batch_create_vector()
     {
         /**
          * @var ObjectCollection $response
          */
         $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace('general')
             ->batchCreate(
                 [
@@ -58,7 +63,7 @@ class WeaviateTest extends TestCase
          * @var ObjectModel $response
          */
         $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace('general')
             ->create(
                 WeaviateCreateRequest::build()
@@ -79,7 +84,7 @@ class WeaviateTest extends TestCase
     public function test_it_can_query_vector()
     {
         $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace('general')
             ->query(
                 WeaviateQueryRequest::build()
@@ -105,7 +110,7 @@ class WeaviateTest extends TestCase
          * @var ObjectModel $response
          */
         $create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->create(
                 WeaviateCreateRequest::build()
@@ -119,7 +124,7 @@ class WeaviateTest extends TestCase
 
         // update the vector
         $update = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->update(
                 WeaviateUpdateRequest::build()
@@ -131,7 +136,7 @@ class WeaviateTest extends TestCase
 
         // check if the new metadata contains the new field
         $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->query(
                 WeaviateQueryRequest::build()
@@ -156,7 +161,7 @@ class WeaviateTest extends TestCase
          * @var ObjectModel $response
          */
         $create = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->create(
                 WeaviateCreateRequest::build()
@@ -170,7 +175,7 @@ class WeaviateTest extends TestCase
 
         // delete
         $delete = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->delete(
                 WeaviateDeleteRequest::build()
@@ -181,7 +186,7 @@ class WeaviateTest extends TestCase
 
         // check if the new metadata contains the new field
         $response = VectorStore::provider(VectorStoreProviderType::WEAVIATE)
-            ->dataset()
+            ->instance()
             ->namespace($randomNamespace)
             ->query(
                 WeaviateQueryRequest::build()

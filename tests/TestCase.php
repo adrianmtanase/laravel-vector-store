@@ -20,7 +20,7 @@ abstract class TestCase extends Orchestra
 
         $app['config']->set('vector-store.default', VectorStoreProviderType::PINECONE->value);
         $app['config']->set('vector-store.pinecone_api_key', env('VECTOR_STORE_PINECONE_API_KEY', ''));
-        $app['config']->set('vector-store.pinecone_environment', env('VECTOR_STORE_PINECONE_ENVIRONMENT', ''));
+        $app['config']->set('vector-store.pinecone_host', env('VECTOR_STORE_PINECONE_HOST', ''));
 
         $app['config']->set('vector-store.weaviate_url', env('VECTOR_STORE_WEAVIATE_URL', ''));
         $app['config']->set('vector-store.weaviate_api_key', env('VECTOR_STORE_WEAVIATE_API_KEY', ''));

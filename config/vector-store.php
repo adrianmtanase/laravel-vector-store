@@ -22,7 +22,7 @@ return [
     |
     */
     'pinecone_api_key' => env('VECTOR_STORE_PINECONE_API_KEY', ''),
-    'pinecone_environment' => env('VECTOR_STORE_PINECONE_ENVIRONMENT', ''),
+    'pinecone_host' => env('VECTOR_STORE_PINECONE_HOST', ''),
 
     /*
     |--------------------------------------------------------------------------

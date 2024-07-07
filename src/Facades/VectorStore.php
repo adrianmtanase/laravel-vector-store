@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static DatabaseAdapter provider(VectorStoreProviderType $provider)
- * @method static DatabaseAdapterAbstract dataset(string $dataset)
+ * @method static DatabaseAdapterAbstract instance()
+ * @method static DatabaseAdapterAbstract dataset()
  *
  * @see \AdrianTanase\VectorStore\DatabaseAdapter
  */

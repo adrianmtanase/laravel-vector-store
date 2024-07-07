@@ -22,7 +22,7 @@ class PineconeTest extends TestCase
 
     public function test_it_can_upsert_to_pinecone()
     {
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->create(
                 PineconeUpsertRequest::build()
@@ -58,7 +58,7 @@ class PineconeTest extends TestCase
                 ])
         );
 
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->create($requests->toArray());
 
@@ -72,7 +72,7 @@ class PineconeTest extends TestCase
      */
     public function test_it_can_get_vectors_by_id_pinecone()
     {
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->get(
                 PineconeGetRequest::build()
@@ -89,7 +89,7 @@ class PineconeTest extends TestCase
      */
     public function test_it_can_query_vectors_pinecone()
     {
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->query(
                 PineconeQueryRequest::build()
@@ -107,7 +107,7 @@ class PineconeTest extends TestCase
     public function test_it_can_update_vectors_pinecone()
     {
         // update the metadata
-        VectorStore::dataset('vector-store')
+        VectorStore::instance()
             ->namespace('general')
             ->update(
                 PineconeUpdateRequest::build()
@@ -119,7 +119,7 @@ class PineconeTest extends TestCase
             );
 
         // check if the new metadata contains the new field
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->get(
                 PineconeGetRequest::build()
@@ -140,7 +140,7 @@ class PineconeTest extends TestCase
     public function test_it_can_delete_vectors_pinecone()
     {
         // update the metadata
-        VectorStore::dataset('vector-store')
+        VectorStore::instance()
             ->namespace('general')
             ->delete(
                 PineconeDeleteRequest::build()
@@ -148,7 +148,7 @@ class PineconeTest extends TestCase
             );
 
         // check if the new metadata contains the new field
-        $response = VectorStore::dataset('vector-store')
+        $response = VectorStore::instance()
             ->namespace('general')
             ->get(
                 PineconeGetRequest::build()
